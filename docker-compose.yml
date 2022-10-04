@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - $PWD:/app
+      # don't mount certain folders
+      - /app/vendor
+    working_dir: /app
