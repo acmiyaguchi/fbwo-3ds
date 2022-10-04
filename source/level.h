@@ -4,7 +4,7 @@
 #include <3ds.h>
 #include "structs.h"
 
-//function declaration
+// function declaration
 void save_highscore();
 void load_highscore();
 int check_collision(const Tetrimino);
@@ -59,7 +59,7 @@ extern u8 render_line_clear;
 extern u8 next_counter;
 extern u8 level;
 extern u8 gameover;
-extern u8 hold_last; //flag to disallow infinite holding
+extern u8 hold_last;  // flag to disallow infinite holding
 extern u8 ARE_state;
 extern u8 last_T_rotation;
 extern u8 last_T_kick;
@@ -111,16 +111,4 @@ extern s32 indicator_frame_config;
 extern const int ARS_rotations[6][4][3][3];
 extern const int ARS_rotation_I[4][4][4];
 
-#endif // LEVEL_H
-
-
-
-
-
-
-
-
-
-
-
-
+#endif  // LEVEL_H
