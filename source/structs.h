@@ -21,7 +21,7 @@
 
 #include <sf2d.h>
 #include <stdio.h>
-#include "include/vorbisfile.h"
+#include <tremor/ivorbisfile.h>
 
 typedef enum { NONE, TETRIS, TSPIN, TSPINSINGLE, TSPINDOUBLE, TSPINTRIPLE} Indicator_to_render;
 

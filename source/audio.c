@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#include "include/vorbisfile.h"
+#include <tremor/ivorbisfile.h>
+#include <tremor/ivorbiscodec.h>
 
 #include "structs.h"
 #include "audio.h"
@@ -67,9 +68,9 @@ u8 audio_init(const char* template)
 	music.last_check = 0;
 	runThread = true;
 	svcCreateEvent(&threadRequest,0);
-	aptOpenSession(); //make the ogg input/decoder thread run on second core - well, actually not really - second core's too slow
-		APT_SetAppCpuTimeLimit(30);
-	aptCloseSession();
+	// make the ogg input/decoder thread run on second core - well, actually not
+	// really - second core's too slow
+	APT_SetAppCpuTimeLimit(30);
 	threadHandle = threadCreate(audio_music_load, 0, STACKSIZE, 0x3f, -1, true);
 	return 0;
 }
@@ -220,7 +221,7 @@ void looped_vorbis_read(OggVorbis_File *vf, u8* buffer, u32 length)
 	u32 total_read = 0;
 	while(total_read != length)
 	{
-		bytes_read = ov_read(vf, (char*)buffer + total_read, length-total_read, 0, 2, 1, &current_section);
+		bytes_read = ov_read(vf, (char*)buffer + total_read, length-total_read, &current_section);
 		total_read += bytes_read;
 		if(!bytes_read)
 		{
