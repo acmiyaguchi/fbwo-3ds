@@ -124,7 +124,9 @@ void audio_music_load() {
 }
 
 void audio_music_play() {
-  if (!music_loaded) return;
+  if (!music_loaded) {
+    return;
+  }
   // first time init
   if (!ndspChnIsPlaying(music.chnl)) {
     ndspChnWaveBufAdd(music.chnl, music.first);
@@ -136,7 +138,9 @@ void audio_music_play() {
   }
 }
 void audio_music_pause() {
-  if (!music_loaded) return;
+  if (!music_loaded) {
+    return;
+  }
   if (!ndspChnIsPaused(music.chnl) && music_loaded) {
     ndspChnSetPaused(music.chnl, true);
   }
@@ -154,7 +158,9 @@ void audio_fini() {
 }
 
 void audio_music_check() {
-  if (!music_loaded) return;
+  if (!music_loaded) {
+    return;
+  }
   u32 cur_sample = ndspChnGetSamplePos(music.chnl);
   // means it went to the second buffer - actually a bad idea for small buffer
   // sizes

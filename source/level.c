@@ -512,7 +512,7 @@ int check_collision(const Tetrimino tetrimino) {
   if (!cfg.ARS) {  // SRS
     if (tetrimino.type != I_TYPE) {
       // i - row, j - col
-      for (int i = 2; i >= 0; --i)
+      for (int i = 2; i >= 0; --i) {
         for (int j = 0; j < 3; ++j) {
           if (rotations[type][rotation][i][j]) {
             // if we have something in that field...
@@ -534,8 +534,9 @@ int check_collision(const Tetrimino tetrimino) {
             }
           }
         }
+      }
     } else {
-      for (int i = 4; i >= 0; --i)
+      for (int i = 4; i >= 0; --i) {
         for (int j = 0; j < 5; ++j) {
           if (rotation_I[rotation][i][j]) {
             // so we have something here
@@ -557,11 +558,12 @@ int check_collision(const Tetrimino tetrimino) {
             }
           }
         }
+      }
     }
   } else {  // ARS
     if (tetrimino.type != I_TYPE) {
       // i - row, j - col
-      for (int i = 2; i >= 0; --i)
+      for (int i = 2; i >= 0; --i) {
         for (int j = 0; j < 3; ++j) {
           if (ARS_rotations[type][rotation][i][j]) {
             // if we have something in that field...
@@ -583,8 +585,9 @@ int check_collision(const Tetrimino tetrimino) {
             }
           }
         }
+      }
     } else {
-      for (int i = 3; i >= 0; --i)
+      for (int i = 3; i >= 0; --i) {
         for (int j = 0; j < 4; ++j) {
           if (ARS_rotation_I[rotation][i][j]) {
             // so we have something here
@@ -606,6 +609,7 @@ int check_collision(const Tetrimino tetrimino) {
             }
           }
         }
+      }
     }
   }
   return 0;
@@ -614,8 +618,11 @@ int check_collision(const Tetrimino tetrimino) {
 // sets default values.
 void initialize_game() {
   // clear the level
-  for (int i = 0; i < DIM_X; ++i)
-    for (int j = 0; j < DIM_Y; ++j) level_grid[i][j] = 0;
+  for (int i = 0; i < DIM_X; ++i) {
+    for (int j = 0; j < DIM_Y; ++j) {
+      level_grid[i][j] = 0;
+    }
+  }
 
   // generate two sets
   srand(time(NULL));
@@ -921,32 +928,36 @@ void glue() {
   if (!cfg.ARS) {
     // SRS
     if (type != I_TYPE)
-      for (int i = 0; i < 3; ++i)
+      for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
           if (posx + i >= 0 && posy + j <= DIM_Y && posx + i < DIM_X)
             level_grid[posx + i][posy + j] |= rotations[type][rotation][j][i];
         }
+      }
     else
-      for (int i = 0; i < 5; ++i)
+      for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j) {
           if (posx + i >= 0 && posy + j <= DIM_Y && posx + i < DIM_X)
             level_grid[posx + i][posy + j] |= rotation_I[rotation][j][i];
         }
+      }
   } else {
     // ARS
     if (type != I_TYPE)
-      for (int i = 0; i < 3; ++i)
+      for (int i = 0; i < 3; ++i) {
         for (int j = 0; j < 3; ++j) {
           if (posx + i >= 0 && posy + j <= DIM_Y && posx + i < DIM_X)
             level_grid[posx + i][posy + j] |=
                 ARS_rotations[type][rotation][j][i];
         }
+      }
     else
-      for (int i = 0; i < 4; ++i)
+      for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
           if (posx + i >= 0 && posy + j <= DIM_Y && posx + i < DIM_X)
             level_grid[posx + i][posy + j] |= ARS_rotation_I[rotation][j][i];
         }
+      }
   }
   ticks_before_glue = 0;
   last_deployed = in_play;
@@ -1192,7 +1203,9 @@ int check_lines() {
       full_lines[i] = LINE_FULL;
       lines++;
     }
-    if (lines == 4) break;
+    if (lines == 4) {
+      break;
+    }
   }
   return lines;
 }
@@ -1216,7 +1229,9 @@ Does the actual work on the lines.
 void move_down(int line) {
   int i, j;
   for (i = line; i > 0; --i) {
-    for (j = 0; j < DIM_X; ++j) level_grid[j][i] = level_grid[j][i - 1];
+    for (j = 0; j < DIM_X; ++j) {
+      level_grid[j][i] = level_grid[j][i - 1];
+    }
   }
   for (j = 0; j < DIM_X; ++j) {
     // reset the top line

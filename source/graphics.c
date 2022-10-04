@@ -598,7 +598,7 @@ void render_block(Tetrimino to_render, bool ghost_piece, bool lastdepl,
     // SRS
     if (to_render.type != I_TYPE) {
       int i, j;
-      for (i = 0; i < 3; ++i)
+      for (i = 0; i < 3; ++i) {
         for (j = 0; j < 3; ++j) {
           if (rotations[to_render.type][to_render.rotation][j][i]) {
             if (to_render.posy + j < 4) continue;
@@ -615,9 +615,10 @@ void render_block(Tetrimino to_render, bool ghost_piece, bool lastdepl,
               sf2d_draw_texture_blend(blocks[to_render.type], x, y, 0xFFDDDDDD);
           }
         }
+      }
     } else {
       int i, j;
-      for (i = 0; i < 5; ++i)
+      for (i = 0; i < 5; ++i) {
         for (j = 0; j < 5; ++j) {
           if (rotation_I[to_render.rotation][j][i]) {
             if (to_render.posy + j < 4) continue;
@@ -633,11 +634,12 @@ void render_block(Tetrimino to_render, bool ghost_piece, bool lastdepl,
               sf2d_draw_texture_blend(blocks[I_TYPE], x, y, 0xFFDDDDDD);
           }
         }
+      }
     }
   } else {
     if (to_render.type != I_TYPE) {
       int i, j;
-      for (i = 0; i < 3; ++i)
+      for (i = 0; i < 3; ++i) {
         for (j = 0; j < 3; ++j) {
           if (ARS_rotations[to_render.type][to_render.rotation][j][i]) {
             if (to_render.posy + j < 4) continue;
@@ -654,9 +656,10 @@ void render_block(Tetrimino to_render, bool ghost_piece, bool lastdepl,
               sf2d_draw_texture_blend(blocks[to_render.type], x, y, 0xFFDDDDDD);
           }
         }
+      }
     } else {
       int i, j;
-      for (i = 0; i < 4; ++i)
+      for (i = 0; i < 4; ++i) {
         for (j = 0; j < 4; ++j) {
           if (ARS_rotation_I[to_render.rotation][j][i]) {
             if (to_render.posy + j < 4) continue;
@@ -672,6 +675,7 @@ void render_block(Tetrimino to_render, bool ghost_piece, bool lastdepl,
               sf2d_draw_texture_blend(blocks[I_TYPE], x, y, 0xFFDDDDDD);
           }
         }
+      }
     }
   }
 }

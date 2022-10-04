@@ -3,7 +3,7 @@ FROM devkitpro/devkitarm:latest
 # install makerom
 WORKDIR /tmp
 RUN apt-get update && \
-    apt-get -y install build-essential clang-format
+    apt-get -y install build-essential clang-format clang-tidy
 
 RUN git clone https://github.com/3DSGuy/Project_CTR.git && \
     cd Project_CTR && \

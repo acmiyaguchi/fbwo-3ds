@@ -66,24 +66,27 @@ void parse_config(FILE* config_file) {
         cfg.DAS = val;
       } else if (!strcmp(command, "invisimode\0")) {
         printf("invisimode: ");
-        if (val)
+        if (val) {
           printf("on\n");
-        else
+        } else {
           printf("off\n");
+        }
         cfg.invisimode = val;
       } else if (!strcmp(command, "hold\0")) {
         printf("hold: ");
-        if (val)
+        if (val) {
           printf("on\n");
-        else
+        } else {
           printf("off\n");
+        }
         cfg.hold = val;
       } else if (!strcmp(command, "ghost_piece\0")) {
         printf("ghost piece: ");
-        if (val)
+        if (val) {
           printf("on\n");
-        else
+        } else {
           printf("off\n");
+        }
         cfg.ghost_piece = val;
       } else if (!strcmp(command, "r_hold\0")) {
         printf("Hold button: ");
@@ -91,15 +94,17 @@ void parse_config(FILE* config_file) {
           KEY_HOLD = KEY_R;
           KEY_DAS = KEY_L;
           printf("R\n");
-        } else
+        } else {
           printf("L\n");
+        }
       } else if (!strcmp(command, "ars\0")) {
         printf("Rotation system: ");
         if (val) {
           cfg.ARS = 1;
           printf("ARS\n");
-        } else
+        } else {
           printf("SRS\n");
+        }
       } else if (!strcmp(command, "next_displayed\0")) {
         if (val >= 0 && val < 7) {
           printf("next displayed pieces no. %d\n", val);
@@ -128,8 +133,9 @@ void parse_config(FILE* config_file) {
         }
       }
     } else if (sscanf(buffer, "%15s %60s", command, theme_folder_name) == 2) {
-      if (!strcmp("theme", command))
+      if (!strcmp("theme", command)) {
         ;
+      }
       {
         printf("theme %s\n", theme_folder_name);
         sprintf(theme_template, "sdmc:/fbwodata/%s/%%s", theme_folder_name);
@@ -295,15 +301,18 @@ int main() {
 
   printf("reading config...\n");
   FILE* config = fopen("sdmc:/fbwodata/config.cfg", "r");
-  if (config != NULL)
+  if (config != NULL) {
     parse_config(config);
-  else
+  } else {
     printf("failed to read config! default values will be used.\n");
+  }
   // some of the loading operations will be in
   // another thread so maybe it will be a bit faster
   audio_init(theme_template);
 
-  if (!load_textures(theme_template)) goto texture_error;
+  if (!load_textures(theme_template)) {
+    goto texture_error;
+  }
   RIGHT_DAS_count = cfg.DAS;
   LEFT_DAS_count = cfg.DAS;
 
