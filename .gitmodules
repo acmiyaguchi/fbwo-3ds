@@ -1,0 +1,6 @@
+[submodule "vendor/sf2dlib"]
+	path = vendor/sf2dlib
+	url = git@github.com:acmiyaguchi/sf2dlib.git
+[submodule "vendor/sfillib"]
+	path = vendor/sfillib
+	url = git@github.com:acmiyaguchi/sfillib.git
