@@ -10,10 +10,20 @@
 #include "structs.h"
 #include "audio.h"
 
+Thread threadHandle;
+Handle threadRequest;
+
+volatile bool runThread;
+u8 last_half;
+u16 last_buf_seq;
+bool music_loaded;
+Music music;
+
+
 u8 audio_init(const char* template)
 {
     ndspInit();
-	
+
     ndspSetOutputMode(NDSP_OUTPUT_STEREO);
     ndspSetOutputCount(1); // Num of buffers
 
@@ -37,8 +47,8 @@ u8 audio_init(const char* template)
 
 							//samples/bytes per sample/stereo
 	music.total_buffer_size = BUFFER_SIZE * 2 * 2;
-	
-	music.first_data = linearAlloc(music.total_buffer_size);	
+
+	music.first_data = linearAlloc(music.total_buffer_size);
 	music.second_data = linearAlloc(music.total_buffer_size);
 
 	if(!music.first_data || !music.second_data)
@@ -57,7 +67,7 @@ u8 audio_init(const char* template)
 	music.last_check = 0;
 	runThread = true;
 	svcCreateEvent(&threadRequest,0);
-	aptOpenSession(); //make the ogg input/decoder thread run on second core - well, actually not really - second core's too slow 
+	aptOpenSession(); //make the ogg input/decoder thread run on second core - well, actually not really - second core's too slow
 		APT_SetAppCpuTimeLimit(30);
 	aptCloseSession();
 	threadHandle = threadCreate(audio_music_load, 0, STACKSIZE, 0x3f, -1, true);
@@ -88,7 +98,7 @@ void audio_music_load()
 	ndspChnSetInterp(MUSIC_CHANNEL, NDSP_INTERP_NONE);
 	ndspChnSetRate(MUSIC_CHANNEL, music.sample_rate);
 	ndspChnSetFormat(MUSIC_CHANNEL, music.ndsp_format);
-	
+
 
 	looped_vorbis_read(music.file, music.first_data, music.total_buffer_size);
 	looped_vorbis_read(music.file, music.second_data, music.total_buffer_size);
@@ -110,14 +120,14 @@ void audio_music_load()
 
 		music.first_data = music.second_data;
 		music.second_data = temp_data; //swap data pointers
-		//now the "first" is playing, and the second is not yet added		
+		//now the "first" is playing, and the second is not yet added
 
 		memset(music.second, 0, sizeof(ndspWaveBuf)); //reset the buffer struct
 		music.second->data_vaddr = music.second_data;
 		music.second->nsamples = BUFFER_SIZE;
 		music.second->looping = false;
 		music.second->status = NDSP_WBUF_FREE;
-	
+
 		looped_vorbis_read(music.file, music.second_data, music.total_buffer_size); //load the actual data
 
 		DSP_FlushDataCache(music.second_data, music.total_buffer_size);
@@ -129,7 +139,7 @@ void audio_music_load()
 
 
 void audio_music_play()
-{	
+{
 	if(!music_loaded)
 		return;
 	if(!ndspChnIsPlaying(music.chnl)) //first time init
@@ -177,7 +187,7 @@ void audio_music_check()
 		svcSignalEvent(threadRequest);
 	}
 	music.last_check = cur_sample;
-	
+
 }
 
 //legacy, not used anymore, but left so I can use it later if necessary
@@ -211,7 +221,7 @@ void looped_vorbis_read(OggVorbis_File *vf, u8* buffer, u32 length)
 	while(total_read != length)
 	{
 		bytes_read = ov_read(vf, (char*)buffer + total_read, length-total_read, 0, 2, 1, &current_section);
-		total_read += bytes_read; 
+		total_read += bytes_read;
 		if(!bytes_read)
 		{
 			ov_raw_seek(vf, 0);

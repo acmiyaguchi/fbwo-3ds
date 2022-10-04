@@ -8,10 +8,101 @@
 #include <string.h>
 #include <stdio.h>
 
+int level_grid[DIM_X][DIM_Y]; //24 rows (4 hidden), 10 cols
+/*
+---------...--->
+|0 1 2 3 ... 9
+|1
+|2
+|3
+...
+|23
+v
+
+*/
+
+Tetrimino* in_play;
+Tetrimino* hold;
+Tetrimino* last_deployed;
+Tetrimino_list* next_blocks;
+
+u32 ticks_before_glue;
+u32 score;
+u32 gravity_frame_counter;
+u32 total_lines;
+u32 high_score;
+u32 ARE_frames;
+
+u8 back_to_back_flag;
+u8 render_line_clear;
+u8 next_counter;
+u8 level;
+u8 gameover;
+u8 hold_last; //flag to disallow infinite holding
+u8 ARE_state;
+u8 last_T_rotation;
+u8 last_T_kick;
+u8 back_to_back_flag_old;
+
+Indicator_to_render indicator;
+
+image background;
+image next_text;
+image next_frame[6];
+image grid;
+image score_text;
+image hiscore_text;
+image lines_frame;
+image level_frame;
+image hold_frame;
+
+sf2d_texture* tetriminos[7];
+sf2d_texture* blocks[7];
+sf2d_texture* score_num[10];
+sf2d_texture* misc_num[10];
+sf2d_texture* gameover_text;
+sf2d_texture* paused_text;
+
+sf2d_texture* tetris_indicator;
+sf2d_texture* tspin_indicator;
+sf2d_texture* tspinsingle_indicator;
+sf2d_texture* tspindouble_indicator;
+sf2d_texture* tspintriple_indicator;
+sf2d_texture* backtoback_indicator;
+
+s32 block_offset_holdx;
+s32 block_offset_holdy;
+
+s32 block_offset_nextx;
+s32 block_offset_nexty;
+
+s32 remove_line_count;
+
+s32 digit_offset_linesy;
+s32 digit_offset_levely;
+
+s32 indicatorx;
+s32 indicatory;
+
+s32 indicator_frames;
+s32 indicator_frame_config;
+
 //peanut variable init time
 u8 render_line_clear = 0;
 
+//array of 24 bytes that tells if any lines are cleared
+u8* full_lines;
 
+const int rotation_offsets[2][4][5][2];
+
+//now compliant with The Tetris Company guidelines!
+//0-6 are all blocks except I-block, which requires 5x5 matrix, so it's in another variable.
+const int rotations[6][4][3][3];
+const int rotation_I[4][5][5];
+
+//and now ARS variants
+const int ARS_rotations[6][4][3][3];
+const int ARS_rotation_I[4][4][4];
 
 const int rotation_offsets[2][4][5][2] = //[JLSTZ/I][Rotation][Offsets1..5][x, y]
 {
@@ -405,9 +496,9 @@ void load_highscore()
 	}
 	else //different config - can't really compare the scores
 	{
-	    high_score = 0; 
+	    high_score = 0;
 	}
-    } 
+    }
     else
 	high_score = 0;
     fclose(hs_file);
@@ -618,7 +709,7 @@ void do_gravity()
     ++gravity_frame_counter;
     if(gravity_frame_counter == cfg.frames_per_drop[level-1])
     {
-	for(int i = 0; i < cfg.rows_per_drop[level-1]; ++i) 
+	for(int i = 0; i < cfg.rows_per_drop[level-1]; ++i)
 	    gravity_drop();
 	gravity_frame_counter = 0;
     }
@@ -845,7 +936,7 @@ void apply_rotation(Tetrimino copy)
 			ticks_before_glue = cfg.glue_delay[level-1];
 			return;
 		    }
-		}  
+		}
 	     }
 	}
 	else if (copy.type == T_TYPE && copy.rotation == 2) //try a kick up... dunno if it should be a T-spin.
@@ -862,7 +953,7 @@ void apply_rotation(Tetrimino copy)
 	     }
 	}
     }
-    
+
 }
 
 

@@ -91,45 +91,4 @@ extern const int rotation_I[4][5][5];
 
 extern Tetrimino_list* next_blocks;
 
-image background;
-image next_text;
-image next_frame[6];
-image grid;
-image score_text;
-image hiscore_text;
-image lines_frame;
-image level_frame;
-image hold_frame;
-
-sf2d_texture* tetriminos[7];
-sf2d_texture* blocks[7];
-sf2d_texture* score_num[10];
-sf2d_texture* misc_num[10];
-sf2d_texture* gameover_text;
-sf2d_texture* paused_text;
-
-sf2d_texture* tetris_indicator;
-sf2d_texture* tspin_indicator;
-sf2d_texture* tspinsingle_indicator;
-sf2d_texture* tspindouble_indicator;
-sf2d_texture* tspintriple_indicator;
-sf2d_texture* backtoback_indicator;
-
-s32 block_offset_holdx;
-s32 block_offset_holdy;
-
-s32 block_offset_nextx;
-s32 block_offset_nexty;
-
-s32 remove_line_count;
-
-s32 digit_offset_linesy;
-s32 digit_offset_levely;
-
-s32 indicatorx;
-s32 indicatory;
-
-s32 indicator_frames;
-s32 indicator_frame_config;
-
 #endif // GRAPHICS_H

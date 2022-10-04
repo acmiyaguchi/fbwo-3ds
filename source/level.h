@@ -4,46 +4,6 @@
 #include <3ds.h>
 #include "structs.h"
 
-int level_grid[DIM_X][DIM_Y]; //24 rows (4 hidden), 10 cols
-/*
----------...--->
-|0 1 2 3 ... 9
-|1
-|2
-|3
-...
-|23
-v
-
-*/
-
-
-Tetrimino* in_play;
-Tetrimino* hold;
-Tetrimino* last_deployed;
-Tetrimino_list* next_blocks;
-
-
-u32 ticks_before_glue;
-u32 score;
-u32 gravity_frame_counter;
-u32 total_lines;
-u32 high_score;
-u32 ARE_frames;
-
-u8 back_to_back_flag;
-u8 render_line_clear;
-u8 next_counter;
-u8 level;
-u8 gameover;
-u8 hold_last; //flag to disallow infinite holding
-u8 ARE_state;
-u8 last_T_rotation;
-u8 last_T_kick;
-u8 back_to_back_flag_old;
-
-Indicator_to_render indicator;
-
 //function declaration
 void save_highscore();
 void load_highscore();
@@ -82,18 +42,74 @@ u32 T_corners_occupied();
 
 extern Configuration cfg;
 
-u8* full_lines; //array of 24 bytes that tells if any lines are cleared
+extern Tetrimino* in_play;
+extern Tetrimino* hold;
+extern Tetrimino* last_deployed;
+extern Tetrimino_list* next_blocks;
 
-const int rotation_offsets[2][4][5][2];
+extern u32 ticks_before_glue;
+extern u32 score;
+extern u32 gravity_frame_counter;
+extern u32 total_lines;
+extern u32 high_score;
+extern u32 ARE_frames;
 
-//now compliant with The Tetris Company guidelines!
-//0-6 are all blocks except I-block, which requires 5x5 matrix, so it's in another variable.
-const int rotations[6][4][3][3];
-const int rotation_I[4][5][5];
+extern u8 back_to_back_flag;
+extern u8 render_line_clear;
+extern u8 next_counter;
+extern u8 level;
+extern u8 gameover;
+extern u8 hold_last; //flag to disallow infinite holding
+extern u8 ARE_state;
+extern u8 last_T_rotation;
+extern u8 last_T_kick;
+extern u8 back_to_back_flag_old;
 
-//and now ARS variants
-const int ARS_rotations[6][4][3][3];
-const int ARS_rotation_I[4][4][4];
+extern Indicator_to_render indicator;
+
+extern image background;
+extern image next_text;
+extern image next_frame[6];
+extern image grid;
+extern image score_text;
+extern image hiscore_text;
+extern image lines_frame;
+extern image level_frame;
+extern image hold_frame;
+
+extern sf2d_texture* tetriminos[7];
+extern sf2d_texture* blocks[7];
+extern sf2d_texture* score_num[10];
+extern sf2d_texture* misc_num[10];
+extern sf2d_texture* gameover_text;
+extern sf2d_texture* paused_text;
+
+extern sf2d_texture* tetris_indicator;
+extern sf2d_texture* tspin_indicator;
+extern sf2d_texture* tspinsingle_indicator;
+extern sf2d_texture* tspindouble_indicator;
+extern sf2d_texture* tspintriple_indicator;
+extern sf2d_texture* backtoback_indicator;
+
+extern s32 block_offset_holdx;
+extern s32 block_offset_holdy;
+
+extern s32 block_offset_nextx;
+extern s32 block_offset_nexty;
+
+extern s32 remove_line_count;
+
+extern s32 digit_offset_linesy;
+extern s32 digit_offset_levely;
+
+extern s32 indicatorx;
+extern s32 indicatory;
+
+extern s32 indicator_frames;
+extern s32 indicator_frame_config;
+
+extern const int ARS_rotations[6][4][3][3];
+extern const int ARS_rotation_I[4][4][4];
 
 #endif // LEVEL_H
 
